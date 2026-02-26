@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>miniapp-bff-service</artifactId>
+        <groupId>com.company</groupId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>bff-base</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <description>顶简Cloud服务-工具</description>
+    <modelVersion>4.0.0</modelVersion>
+    <name>公共库</name>
+
+
+    <modules>
+        <module>bff-base-common</module>
+        <module>bff-base-component</module>
+        <module>bff-base-core</module>
+    </modules>
+
+
+</project>

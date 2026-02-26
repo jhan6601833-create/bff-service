@@ -1,0 +1,91 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: qrcode-service
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-2zeig606k51xqj9w47o.mysql.rds.aliyuncs.com:3306/db_qr_codes?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: xiangyuan@0424
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  data:
+    redis:
+      database: 3
+      host: en-test-02.redis.rds.aliyuncs.com
+      port: 1234
+      client-type: lettuce
+      password: test001@123
+      username: test001
+
+  rabbitmq:
+    host: rabbitmq-cn-71j4dosm705.cn-beijing.amqp-14.net.mq.amqp.aliyuncs.com
+    port: 5672
+    username: MjpyYWJiaXRtcS1jbi03MWo0ZG9zbTcwNTpMVEFJNXRCcm1ORFV1Zlpxelgxbzh4U0Y=
+    password: RTFCMkI5NUEwRjcwQUZBNjMxNkM1REJENDcwQTQ1QkFCOTE0NzZBMzoxNzU0MzY0MDk0MDA0
+    virtual-host: /
+
+# MyBatis配置
+mybatis:
+  # Mapper XML文件位置
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类包路径
+  type-aliases-package: com.bjdj.qrcode.dal.entity
+  configuration:
+    # 开启驼峰命名转换：Table{create_time} -> Entity{createTime}
+    map-underscore-to-camel-case: true
+    # 默认枚举处理器
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+    # 开启二级缓存
+    cache-enabled: false
+    # 日志实现
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 全局映射器启用缓存
+    lazy-loading-enabled: true
+    # 查询时，关闭关联对象即时加载以提高性能
+    aggressive-lazy-loading: false
+    # 允许使用列标签代替列名
+    use-column-label: true
+    # 允许使用自定义的主键值(比如由程序生成的UUID 32位编码)
+    use-generated-keys: true
+    # 给予被嵌套的resultMap以字段-属性的映射支持
+    auto-mapping-behavior: partial
+    # 对于批量更新操作缓存SQL以提高性能
+    default-executor-type: reuse
+    # 数据库超过25000秒仍未响应则超时
+    default-statement-timeout: 25000
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+    qos-enable: false # 关闭QoS（运维服务），生产环境建议关闭或配置访问控制
+    logger: slf4j # 指定日志框架
+  protocol:
+    name: tri # Triple协议，Dubbo 3推荐协议，支持gRPC互通
+    port: 50051
+    serialization: protobuf # Triple协议推荐使用hessian2或protobuf，比fastjson2更稳定
+    threadpool: fixed # 明确线程池模型，避免默认策略差异
+    payload: 8388608 # 最大请求体（8MB）
+  registry:
+    address: nacos://mse-d27a47d2-p.nacos-ans.mse.aliyuncs.com:8848?namespace=local
+    register-mode: instance
+  provider:
+    group: ${spring.application.name}
+    delay: -1 # 等Spring容器就绪后再暴露服务，降低冷启动期超时概率
+    warmup: 10000 # 服务预热时间（毫秒），新服务上线时流量逐步增加
+  consumer:
+    check: false # 启动时不检查Provider是否存在，避免启动顺序问题
+    lazy: false # 【关键】关闭懒加载，启动时立即建立连接，避免首次请求超时
+    init: true # 【关键】饥饿加载，提前初始化引用
+  scan:
+    base-packages: com.company

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <contextName>${HOSTNAME}</contextName>
+
+    <Property name="LOG_PROJECT" value="demo-service" />
+    <Property name="LOG_BASE_PATH" value="logs/${LOG_PROJECT}" />
+    <Property name="DEFAULT_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss.SSS}$$%contextName{}$$%logger{}$$%level{}$$${LOG_PROJECT}$$%X{traceID}$$%msg%n" />
+    <Property name="MAX_HISTORY" value="14" />
+    <Property name="ENCODE" value="UTF-8" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                ${DEFAULT_PATTERN}
+            </Pattern>
+        </layout>
+    </appender>
+    <appender name="FILE_STDOUT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_BASE_PATH}/${HOSTNAME}-%d{yyyyMMdd_HH}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${DEFAULT_PATTERN}</Pattern>
+            <charset>${ENCODE}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_FILE_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志，默认，如果队列80%已满，则丢弃TRACT、DEBUG、INFO级别日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认队列的深度，该值会影响性能，默认为256 -->
+        <queueSize>1024</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="FILE_STDOUT"/>
+    </appender>
+
+    <logger name="com.alibaba.cloud.nacos" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE_STDOUT" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ASYNC_FILE_STDOUT" />
+    </root>
+
+
+</configuration>

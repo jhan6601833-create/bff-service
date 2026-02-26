@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.ShopGroupInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.admin.entity.ShopGroupInfoEntity">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="group_name" property="groupName" />
+        <result column="group_short_name" property="groupShortName" />
+        <result column="city_id" property="cityId" />
+        <result column="link_man" property="linkMan" />
+        <result column="mobile" property="mobile" />
+        <result column="service_tel" property="serviceTel" />
+        <result column="address" property="address" />
+        <result column="operation_model" property="operationModel" />
+        <result column="business_model" property="businessModel" />
+        <result column="agent" property="agent" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, group_id, group_name, group_short_name, city_id, link_man, mobile, service_tel, address, operation_model, business_model, agent, is_deleted, created_at, updated_at
+    </sql>
+
+</mapper>
