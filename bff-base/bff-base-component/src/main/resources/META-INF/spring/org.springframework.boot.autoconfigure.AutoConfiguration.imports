@@ -1,0 +1,5 @@
+com.bjdj.component.autoconfigure.BaseComponentAutoConfiguration
+com.bjdj.component.autoconfigure.MysqlMybatisAutoConfiguration
+com.bjdj.component.autoconfigure.RedisAutoConfiguration
+com.bjdj.component.autoconfigure.RabbitmqAutoConfiguration
+com.bjdj.component.autoconfigure.KafkaAutoConfiguration
